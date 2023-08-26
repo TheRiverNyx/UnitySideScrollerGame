@@ -1,5 +1,5 @@
 {
-    "name": "GeneralActions",
+    "name": "PlayerActions",
     "maps": [
         {
             "name": "gameplay",
@@ -48,17 +48,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "up",
-                    "id": "e6063939-eb04-4d09-aaf4-8095a73519fb",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "down",
                     "id": "18ed1183-a818-49c6-a654-287cb21127bd",
                     "path": "<Keyboard>/s",
@@ -101,17 +90,6 @@
                     "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "2e5148f2-deb4-4351-bc36-1370abaca89c",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "down",
@@ -161,6 +139,28 @@
                     "name": "",
                     "id": "4e997d96-f45d-4d16-aecf-dbe34f755cf1",
                     "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7925ac8-6268-4dbd-a55f-447aa7d82fd3",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aa4c7f32-0b75-49ab-9539-cc9456bba72b",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
