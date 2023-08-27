@@ -27,21 +27,19 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-
-    
-
     void OnJump()
     {
-        rb.velocity = Vector2.up * jumpForce;
+        rb.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);
     }
 
-    void OnMove(InputValue value)
+    public void OnMove(InputValue value)
     {
         playerMoveVector = value.Get<Vector2>();
-        
     }
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(playerMoveVector.x * playerSpeed,rb.velocity.y);
+        //rb.velocity = new Vector2(playerMoveVector.x * playerSpeed,rb.velocity.y);
+        rb.AddForce(new Vector2(playerMoveVector.x * playerSpeed, 0f));
+        
     }
 }
