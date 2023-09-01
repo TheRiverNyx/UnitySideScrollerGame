@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     [SerializeField] private float checkRadius;
     private bool isPlayerMoving;
+    public float maxRotation;
     
 
     // Start is called before the first frame update
@@ -31,8 +32,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playerCamera.gameObject.transform.position = new Vector3(rb.position.x,rb.position.y,playerCamera.gameObject.transform.position.z);
         
-
     }
     public void OnJump(InputAction.CallbackContext context)
     {
@@ -60,8 +61,9 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = Physics2D.OverlapCircle(groundChecker.position, checkRadius, whatIsGround);
-        rb.AddForce(new Vector2(playerMoveVector.x * playerAcceleration, 0f));//I could just do player acceleration, but i like how this feels more
+        rb.AddForce(new Vector2(playerMoveVector.x * playerAcceleration, 0f));
         rb.velocity=Vector2.ClampMagnitude(rb.velocity, maxPlayerSpeed);
+        //adds drag to player when not player not pressing move keys and on the ground
         if (rb.velocity.x == 0f || !isGrounded)
         {
             rb.drag = defaultDrag;
@@ -72,5 +74,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.drag = defaultDrag;
         }
+        rb.rotation = Mathf.Clamp(rb.rotation, -maxRotation, maxRotation);
     }
 }
