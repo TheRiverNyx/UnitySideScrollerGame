@@ -17,16 +17,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float defaultDrag;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private LayerMask whatIsGround;
-    private bool isGrounded;
+    public bool isGrounded;
     [SerializeField] private float checkRadius;
     private bool isPlayerMoving;
     public float maxRotation;
-    
+    private bool playerIsRight;
+    private Animator animator;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        playerIsRight = true;
     }
 
     // Update is called once per frame
@@ -41,6 +45,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.drag = defaultDrag;
             rb.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);
+            animator.SetTrigger("Jump");
         }
     }
 
@@ -48,19 +53,40 @@ public class PlayerController : MonoBehaviour
     {
         if (context.started)
         {
+            playerMoveVector = context.ReadValue<Vector2>();
+            if (playerMoveVector.x > 0 && !playerIsRight)
+            {
+                transform.localScale = new Vector3(
+                    1,
+                    transform.localScale.y,
+                    transform.localScale.z
+                );
+                playerIsRight = true;
+                
+            } else if(playerMoveVector.x<0 && playerIsRight) {
+                transform.localScale = new Vector3(
+                    -1,
+                    transform.localScale.y,
+                    transform.localScale.z
+                    );
+                playerIsRight = false;
+            }
+            
             isPlayerMoving = true;
             rb.drag = defaultDrag;
-            playerMoveVector = context.ReadValue<Vector2>();
+            
         }else if (context.canceled)
         {
             playerMoveVector = context.ReadValue<Vector2>();
             rb.drag = dragForce;
             isPlayerMoving = false;
         }
+        animator.SetBool("isMoving", isPlayerMoving);
     }
     private void FixedUpdate()
     {
         isGrounded = Physics2D.OverlapCircle(groundChecker.position, checkRadius, whatIsGround);
+        animator.SetBool("isFalling",!isGrounded);
         rb.AddForce(new Vector2(playerMoveVector.x * playerAcceleration, 0f));
         rb.velocity=Vector2.ClampMagnitude(rb.velocity, maxPlayerSpeed);
         //adds drag to player when not player not pressing move keys and on the ground

@@ -6,15 +6,15 @@ public class AlignPlayerToGround : MonoBehaviour
 {
     public float alignSpeed = 2.0f;  // Speed of alignment
     private Rigidbody2D rb;
-    private float targetRotation;  // Target angle for alignment
-
+    [SerializeField] float AlignCheckDist;
+    private float targetRotation;  // Target rotation
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         targetRotation = 0f; // Default rotation
     }
 
-    void Update()
+    void FixedUpdate()
     {
         AlignWithGround();
     }
@@ -22,7 +22,7 @@ public class AlignPlayerToGround : MonoBehaviour
     void AlignWithGround()
     {
         var position = rb.position;
-        RaycastHit2D hit = Physics2D.Raycast(new Vector2(position.x,position.y), Vector2.down, 5f);
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(position.x,position.y), Vector2.down, AlignCheckDist);
 
         if (hit.collider != null)
         {
