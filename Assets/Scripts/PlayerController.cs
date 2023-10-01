@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public float maxRotation;
     private bool playerIsRight;
     private Animator animator;
-
+    [SerializeField] private TextMeshProUGUI ui;
 
     // Start is called before the first frame update
     void Start()
