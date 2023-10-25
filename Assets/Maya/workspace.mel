@@ -1,8 +1,13 @@
 //Maya 2024 Project Definition
 
 workspace -fr "fluidCache" "cache/nCache/fluid";
+<<<<<<< Updated upstream
 workspace -fr "images" "images";
 workspace -fr "JT_ATF" "data";
+=======
+workspace -fr "JT_ATF" "data";
+workspace -fr "images" "images";
+>>>>>>> Stashed changes
 workspace -fr "offlineEdit" "scenes/edits";
 workspace -fr "STEP_ATF Export" "data";
 workspace -fr "furShadowMap" "renderData/fur/furShadowMap";
@@ -58,10 +63,18 @@ workspace -fr "DWG_ATF Export" "data";
 workspace -fr "depth" "renderData/depth";
 workspace -fr "sceneAssembly" "sceneAssembly";
 workspace -fr "IGES_ATF Export" "data";
+<<<<<<< Updated upstream
 workspace -fr "teClipExports" "Time Editor/Clip Exports";
 workspace -fr "IGES_ATF" "data";
 workspace -fr "PARASOLID_ATF" "data";
 workspace -fr "ASS" "data";
+=======
+workspace -fr "PARASOLID_ATF" "data";
+workspace -fr "IGES_ATF" "data";
+workspace -fr "teClipExports" "Time Editor/Clip Exports";
+workspace -fr "ASS" "data";
+workspace -fr "Substance" "data";
+>>>>>>> Stashed changes
 workspace -fr "audio" "sound";
 workspace -fr "USD Import" "data";
 workspace -fr "Alembic" "data";
