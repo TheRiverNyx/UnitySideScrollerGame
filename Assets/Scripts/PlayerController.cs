@@ -57,19 +57,11 @@ public class PlayerController : MonoBehaviour
             playerMoveVector = context.ReadValue<Vector2>();
             if (playerMoveVector.x > 0 && !playerIsRight)
             {
-                transform.localScale = new Vector3(
-                    1,
-                    transform.localScale.y,
-                    transform.localScale.z
-                );
+                transform.eulerAngles = new Vector3(0, 0, 0);
                 playerIsRight = true;
                 
             } else if(playerMoveVector.x<0 && playerIsRight) {
-                transform.localScale = new Vector3(
-                    -1,
-                    transform.localScale.y,
-                    transform.localScale.z
-                    );
+                transform.eulerAngles = new Vector3(0, -180, 0);
                 playerIsRight = false;
             }
             
@@ -101,8 +93,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.drag = defaultDrag;
         }
-        float currentYRotation = transform.eulerAngles.y;
-        float clampedYRotation = Mathf.Clamp(currentYRotation, -maxRotation, maxRotation);
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, clampedYRotation, transform.eulerAngles.z);
+        float currentZRotation = transform.eulerAngles.z;
+        float clampedZRotation = Mathf.Clamp(currentZRotation, -maxRotation, maxRotation);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, clampedZRotation);
     }
 }
