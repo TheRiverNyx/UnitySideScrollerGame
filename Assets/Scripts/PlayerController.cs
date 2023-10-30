@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Camera playerCamera;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private Vector2 playerMoveVector;
     [SerializeField] private float jumpForce;
     [SerializeField] private float playerAcceleration;
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         playerIsRight = true;
     }
 
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             rb.drag = defaultDrag;
-            rb.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * jumpForce,ForceMode.Impulse);
             animator.SetTrigger("Jump");
         }
     }
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundChecker.position, checkRadius, whatIsGround);
+        isGrounded = Physics.CheckSphere(groundChecker.position, checkRadius, whatIsGround);
         animator.SetBool("isFalling",!isGrounded);
         rb.AddForce(new Vector2(playerMoveVector.x * playerAcceleration, 0f));
         rb.velocity=Vector2.ClampMagnitude(rb.velocity, maxPlayerSpeed);
@@ -101,6 +101,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.drag = defaultDrag;
         }
-        rb.rotation = Mathf.Clamp(rb.rotation, -maxRotation, maxRotation);
+        float currentYRotation = transform.eulerAngles.y;
+        float clampedYRotation = Mathf.Clamp(currentYRotation, -maxRotation, maxRotation);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, clampedYRotation, transform.eulerAngles.z);
     }
 }

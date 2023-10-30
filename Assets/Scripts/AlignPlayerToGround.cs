@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//generated partially with ChatGPT
+
 public class AlignPlayerToGround : MonoBehaviour
 {
     public float alignSpeed = 2.0f;  // Speed of alignment
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     [SerializeField] float AlignCheckDist;
     private float targetRotation;  // Target rotation
+
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         targetRotation = 0f; // Default rotation
     }
 
@@ -21,23 +22,22 @@ public class AlignPlayerToGround : MonoBehaviour
 
     void AlignWithGround()
     {
-        var position = rb.position;
-        RaycastHit2D hit = Physics2D.Raycast(new Vector2(position.x,position.y), Vector2.down, AlignCheckDist);
+        RaycastHit hit;
+        bool isGrounded = Physics.Raycast(rb.position, Vector3.down, out hit, AlignCheckDist);
 
-        if (hit.collider != null)
+        if (isGrounded)
         {
             // Get the angle of the surface using the normal
-            float surfaceAngle = Mathf.Atan2(hit.normal.y, hit.normal.x) * Mathf.Rad2Deg - 90f;
-            targetRotation = surfaceAngle;
+            Vector3 groundNormal = hit.normal;
+            Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundNormal);
+            Quaternion rotation = Quaternion.LookRotation(projectedForward, groundNormal);
+            rb.rotation = Quaternion.Slerp(rb.rotation, rotation, alignSpeed * Time.deltaTime);
         }
         else
         {
             // If not on the ground, return to default rotation
-            targetRotation = 0f;
+            Quaternion defaultRotation = Quaternion.Euler(0f, rb.rotation.eulerAngles.y, 0f);
+            rb.rotation = Quaternion.Slerp(rb.rotation, defaultRotation, alignSpeed * Time.deltaTime);
         }
-
-        // Lerp the player's rotation to the target rotation
-        float currentRotation = Mathf.LerpAngle(rb.rotation, targetRotation, alignSpeed * Time.deltaTime);
-        rb.SetRotation(currentRotation);
     }
 }
