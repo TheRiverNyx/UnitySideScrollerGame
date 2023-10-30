@@ -52,16 +52,17 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        float currentZRotation = transform.eulerAngles.z;
         if (context.started)
         {
             playerMoveVector = context.ReadValue<Vector2>();
             if (playerMoveVector.x > 0 && !playerIsRight)
             {
-                transform.eulerAngles = new Vector3(0, 0, 0);
+                transform.eulerAngles = new Vector3(0, 0, currentZRotation);
                 playerIsRight = true;
                 
             } else if(playerMoveVector.x<0 && playerIsRight) {
-                transform.eulerAngles = new Vector3(0, -180, 0);
+                transform.eulerAngles = new Vector3(0, -180, currentZRotation);
                 playerIsRight = false;
             }
             
