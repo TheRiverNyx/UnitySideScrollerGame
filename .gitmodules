@@ -1,3 +1,3 @@
-[submodule "Assets/Tools"]
-	path = Assets/Tools
+[submodule "ArtisanDream.Tools"]
+	path = ArtisanDream.Tools
 	url = https://github.com/anthonyromrell/ArtisanDream.Tools

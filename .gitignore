@@ -63,3 +63,10 @@ crashlytics-build.properties
 
 
 Assets/Samples/
+Assets/Maya/movies
+
+*.hdanc
+
+Assets/Scenes/SampleScene/NavMesh-bridge1.asset
+
+Assets/Scenes/SampleScene/NavMesh-bridge1_bakedHDA.asset
