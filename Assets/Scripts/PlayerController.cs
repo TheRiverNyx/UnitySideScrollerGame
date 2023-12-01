@@ -67,11 +67,7 @@ public class PlayerController : MonoBehaviour
         LimitPlayerRotation();
         
     }
-
-    // Custom methods for better readability
-
     
-
     private void HandleJump()
     {
         rb.drag = defaultDrag;
