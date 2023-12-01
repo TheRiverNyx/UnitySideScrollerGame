@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class AlignPlayerToGround : MonoBehaviour
 {
-    public float alignSpeed = 2.0f;  // Speed of alignment
+    public float alignSpeed = 1.0f;  // Speed of alignment
     private Rigidbody rb;
-    [SerializeField] float AlignCheckDist;
+    [FormerlySerializedAs("AlignCheckDist")] [SerializeField] float alignCheckDist;
     private float targetRotation;  // Target rotation
+    [SerializeField] LayerMask groundLayer;  // Specify the ground layer in the inspector
+    public float maxSurfaceAngle = 45f;  // Maximum allowed surface angle in degrees
 
     void Start()
     {
@@ -23,15 +26,20 @@ public class AlignPlayerToGround : MonoBehaviour
     void AlignWithGround()
     {
         RaycastHit hit;
-        bool isGrounded = Physics.Raycast(rb.position, Vector3.down, out hit, AlignCheckDist);
+        bool isGrounded = Physics.Raycast(rb.position, Vector3.down, out hit, alignCheckDist, groundLayer);
 
         if (isGrounded)
         {
-            // Get the angle of the surface using the normal
-            Vector3 groundNormal = hit.normal;
-            Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundNormal);
-            Quaternion rotation = Quaternion.LookRotation(projectedForward, groundNormal);
-            rb.rotation = Quaternion.Slerp(rb.rotation, rotation, alignSpeed * Time.deltaTime);
+            // Check if the surface angle is within the allowed range
+            float surfaceAngle = Vector3.Angle(Vector3.up, hit.normal);
+            if (surfaceAngle <= maxSurfaceAngle)
+            {
+                // Get the angle of the surface using the normal
+                Vector3 groundNormal = hit.normal;
+                Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundNormal);
+                Quaternion rotation = Quaternion.LookRotation(projectedForward, groundNormal);
+                rb.rotation = Quaternion.Slerp(rb.rotation, rotation, alignSpeed * Time.deltaTime);
+            }
         }
         else
         {

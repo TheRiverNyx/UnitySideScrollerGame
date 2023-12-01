@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,9 +6,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Camera playerCamera;
-    private Rigidbody rb;
-    private Vector2 playerMoveVector;
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI ui;
+
+    [Header("Movement")]
+    [SerializeField] private Rigidbody rb;
     [SerializeField] private float jumpForce;
     [SerializeField] private float playerAcceleration;
     [SerializeField] private float maxPlayerSpeed;
@@ -18,41 +18,71 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float defaultDrag;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private LayerMask whatIsGround;
-    public bool isGrounded;
+    private bool isGrounded;
     [SerializeField] private float checkRadius;
+    private Vector2 playerMoveVector;
     private bool isPlayerMoving;
-    public float maxRotation;
+    [SerializeField] private float maxRotation;
     private bool playerIsRight;
     private Animator animator;
-    [SerializeField] private TextMeshProUGUI ui;
+
+    
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
         playerIsRight = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        playerCamera.gameObject.transform.position = new Vector3(rb.position.x,rb.position.y,playerCamera.gameObject.transform.position.z);
-        
+
     }
+
+    // Input System callbacks
     public void OnJump(InputAction.CallbackContext context)
     {
         if (isGrounded)
         {
-            rb.drag = defaultDrag;
-            rb.AddForce(Vector2.up * jumpForce,ForceMode.Impulse);
-            animator.SetTrigger("Jump");
+            HandleJump();
         }
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        HandleMoveInput(context);
+    }
+
+    private void FixedUpdate()
+    {
+        // Check if grounded
+        CheckGrounded();
+
+        // Handle player movement
+        HandlePlayerMovement();
+
+        // Limit player rotation
+        LimitPlayerRotation();
+        
+    }
+
+    // Custom methods for better readability
+
+    
+
+    private void HandleJump()
+    {
+        rb.drag = defaultDrag;
+        rb.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
+        animator.SetTrigger("Jump");
+    }
+
+    private void HandleMoveInput(InputAction.CallbackContext context)
+    {
         float currentZRotation = transform.eulerAngles.z;
+
         if (context.started)
         {
             playerMoveVector = context.ReadValue<Vector2>();
@@ -60,42 +90,64 @@ public class PlayerController : MonoBehaviour
             {
                 transform.eulerAngles = new Vector3(0, 0, currentZRotation);
                 playerIsRight = true;
-                
-            } else if(playerMoveVector.x<0 && playerIsRight) {
+            }
+            else if (playerMoveVector.x < 0 && playerIsRight)
+            {
                 transform.eulerAngles = new Vector3(0, -180, currentZRotation);
                 playerIsRight = false;
             }
-            
+
             isPlayerMoving = true;
             rb.drag = defaultDrag;
-            
-        }else if (context.canceled)
+        }
+        else if (context.canceled)
         {
             playerMoveVector = context.ReadValue<Vector2>();
             rb.drag = dragForce;
             isPlayerMoving = false;
         }
+
         animator.SetBool("isMoving", isPlayerMoving);
     }
-    private void FixedUpdate()
+
+    private void CheckGrounded()
     {
         isGrounded = Physics.CheckSphere(groundChecker.position, checkRadius, whatIsGround);
-        animator.SetBool("isFalling",!isGrounded);
+        animator.SetBool("isFalling", !isGrounded);
+    }
+
+    private void HandlePlayerMovement()
+    {
         rb.AddForce(new Vector2(playerMoveVector.x * playerAcceleration, 0f));
-        rb.velocity=Vector2.ClampMagnitude(rb.velocity, maxPlayerSpeed);
-        //adds drag to player when not player not pressing move keys and on the ground
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxPlayerSpeed);
+
+        // Adds drag to the player when not pressing move keys and on the ground
         if (rb.velocity.x == 0f || !isGrounded)
         {
             rb.drag = defaultDrag;
-        }else if (!isPlayerMoving && isGrounded)
+        }
+        else if (!isPlayerMoving && isGrounded)
         {
             rb.drag = dragForce;
-        } else if (!isPlayerMoving && !isGrounded)
+        }
+        else if (!isPlayerMoving && !isGrounded)
         {
             rb.drag = defaultDrag;
         }
-        float currentZRotation = transform.eulerAngles.z;
+    }
+
+    private void LimitPlayerRotation()
+    {
+        var eulerAngles = transform.eulerAngles;
+        float currentZRotation = eulerAngles.z;
         float clampedZRotation = Mathf.Clamp(currentZRotation, -maxRotation, maxRotation);
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, clampedZRotation);
+        eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, clampedZRotation);
+    }
+
+    public void GetCameraValues(out Rigidbody rbData, out float playerSpeedData)
+    {
+        rbData = rb;
+        playerSpeedData = maxPlayerSpeed;
     }
 }
+
