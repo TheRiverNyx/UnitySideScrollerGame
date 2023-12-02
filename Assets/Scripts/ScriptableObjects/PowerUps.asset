@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9c0e4e8c98e544aa9cfb0cc117c1d9, type: 3}
   m_Name: PowerUps
   m_EditorClassIdentifier: 
-  SpeedBoost: 0
-  DoubleJump: 0
+  numOfHealthPotions: 0
+  Health: 100
+  playerSpeed: 10.05
+  numOfSpeedBoosts: 0
+  Ammo: 0
+  minAmmoPickup: 4
+  maxAmmoPickup: 10
