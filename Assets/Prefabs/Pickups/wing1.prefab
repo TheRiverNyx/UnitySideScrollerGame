@@ -510,6 +510,7 @@ GameObject:
   - component: {fileID: 7285680664887187551}
   - component: {fileID: 5972860588090026971}
   - component: {fileID: 3975528513816529804}
+  - component: {fileID: 5501051468235795224}
   m_Layer: 0
   m_Name: wing1
   m_TagString: SpeedBoost
@@ -5361,6 +5362,27 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5501051468235795224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6927414509326065262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f4fa556a6202e418b32ccbd82b6b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickUpSpeedPotion:
+    m_PersistentCalls:
+      m_Calls: []
+  pickUpHealthPotion:
+    m_PersistentCalls:
+      m_Calls: []
+  pickUpAmmo:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7013602154739846840
 GameObject:
   m_ObjectHideFlags: 0

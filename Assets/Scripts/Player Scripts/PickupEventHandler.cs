@@ -5,10 +5,6 @@ public class PickupEventHandler : MonoBehaviour
 {
     private string type;
 
-    public UnityEvent pickUpSpeedPotion;
-    public UnityEvent pickUpHealthPotion;
-    public UnityEvent pickUpAmmo;
-
     void Start()
     {
         type = gameObject.tag;
@@ -23,7 +19,7 @@ public class PickupEventHandler : MonoBehaviour
             {
                 switch (type)
                 {
-                    case "SpeedPotion":
+                    case "SpeedBoost":
                         playerStatsManager.Invoke("PickUpSpeedBoost",0);
                         break;
                     case "HealthPotion":

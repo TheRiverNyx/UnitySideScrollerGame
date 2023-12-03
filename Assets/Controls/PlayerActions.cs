@@ -53,6 +53,24 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use Health Potion"",
+                    ""type"": ""Button"",
+                    ""id"": ""859888d6-df50-49e8-9cb2-56725538233b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use Speed Boost"",
+                    ""type"": ""Button"",
+                    ""id"": ""ea63ca9e-b946-43b3-b110-d5612e2a9d15"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -198,6 +216,28 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19959d38-7614-49fd-bd45-e92987144b81"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Use Health Potion"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11ddc0fc-a753-4d6e-83b4-fde8f680edcc"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Use Speed Boost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -209,6 +249,8 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_gameplay_Move = m_gameplay.FindAction("Move", throwIfNotFound: true);
         m_gameplay_Jump = m_gameplay.FindAction("Jump", throwIfNotFound: true);
         m_gameplay_Fire = m_gameplay.FindAction("Fire", throwIfNotFound: true);
+        m_gameplay_UseHealthPotion = m_gameplay.FindAction("Use Health Potion", throwIfNotFound: true);
+        m_gameplay_UseSpeedBoost = m_gameplay.FindAction("Use Speed Boost", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -273,6 +315,8 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_gameplay_Move;
     private readonly InputAction m_gameplay_Jump;
     private readonly InputAction m_gameplay_Fire;
+    private readonly InputAction m_gameplay_UseHealthPotion;
+    private readonly InputAction m_gameplay_UseSpeedBoost;
     public struct GameplayActions
     {
         private @PlayerActions m_Wrapper;
@@ -280,6 +324,8 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_gameplay_Move;
         public InputAction @Jump => m_Wrapper.m_gameplay_Jump;
         public InputAction @Fire => m_Wrapper.m_gameplay_Fire;
+        public InputAction @UseHealthPotion => m_Wrapper.m_gameplay_UseHealthPotion;
+        public InputAction @UseSpeedBoost => m_Wrapper.m_gameplay_UseSpeedBoost;
         public InputActionMap Get() { return m_Wrapper.m_gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -298,6 +344,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @UseHealthPotion.started += instance.OnUseHealthPotion;
+            @UseHealthPotion.performed += instance.OnUseHealthPotion;
+            @UseHealthPotion.canceled += instance.OnUseHealthPotion;
+            @UseSpeedBoost.started += instance.OnUseSpeedBoost;
+            @UseSpeedBoost.performed += instance.OnUseSpeedBoost;
+            @UseSpeedBoost.canceled += instance.OnUseSpeedBoost;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -311,6 +363,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @UseHealthPotion.started -= instance.OnUseHealthPotion;
+            @UseHealthPotion.performed -= instance.OnUseHealthPotion;
+            @UseHealthPotion.canceled -= instance.OnUseHealthPotion;
+            @UseSpeedBoost.started -= instance.OnUseSpeedBoost;
+            @UseSpeedBoost.performed -= instance.OnUseSpeedBoost;
+            @UseSpeedBoost.canceled -= instance.OnUseSpeedBoost;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -333,5 +391,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnUseHealthPotion(InputAction.CallbackContext context);
+        void OnUseSpeedBoost(InputAction.CallbackContext context);
     }
 }

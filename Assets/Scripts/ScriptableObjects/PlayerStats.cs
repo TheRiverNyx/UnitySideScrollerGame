@@ -7,11 +7,15 @@ public class PlayerStats : ScriptableObject
 {
     [Header("Health")]
     public int numOfHealthPotions;
-    public int Health;
+    public float Health;
+    public float minHealthPickup;
+    public float maxHealthPickup;
     
     [Header("Speed")]
     public float playerSpeed;
+    public float boostAmount;
     public int numOfSpeedBoosts;
+    public float JumpHeight;
     
     [Header("Ammo")]
     public int Ammo;

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2401964206212201273}
   - component: {fileID: 8644222135830345554}
   - component: {fileID: 6143262639696547869}
+  - component: {fileID: 5330894969244552375}
   m_Layer: 0
   m_Name: Potion2
   m_TagString: HealthPotion
@@ -4904,3 +4905,24 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5330894969244552375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5569642066697180627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f4fa556a6202e418b32ccbd82b6b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickUpSpeedPotion:
+    m_PersistentCalls:
+      m_Calls: []
+  pickUpHealthPotion:
+    m_PersistentCalls:
+      m_Calls: []
+  pickUpAmmo:
+    m_PersistentCalls:
+      m_Calls: []

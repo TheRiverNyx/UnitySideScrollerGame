@@ -6,14 +6,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI ui;
-
     [Header("References")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private Animator animator;
     public PlayerStats playerStats;
+    private PlayerStatsManager playerStatsManager;
+    public ParticleSystem HealthParticles;
+    public ParticleSystem SpeedParticles;
+    private UIManager uiManager;
 
     [Header("Movement")]
     [SerializeField] private float jumpForce;
@@ -41,15 +42,15 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         maxPlayerSpeed = playerStats.playerSpeed;
+        playerStatsManager = GetComponent<PlayerStatsManager>();
         animator = GetComponent<Animator>();
     }
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.started && playerStats.Ammo > 0)
+        if (context.started && playerStatsManager.playerStats.Ammo > 0)
         {
             Shoot();
-            playerStats.Ammo -= 1;
         }
     }
 
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
         {
             bulletRb.velocity = new Vector3(shootDirection.x * bulletForce, shootDirection.y * bulletForce, 0);
         }
+        playerStatsManager.Shoot();
     }
 
     // Input System callbacks
@@ -79,9 +81,22 @@ public class PlayerController : MonoBehaviour
         {
             rb.drag = defaultDrag;
             float scaledJumpForce = jumpForce * Mathf.Abs(rb.velocity.x) / maxPlayerSpeed;
-            rb.AddForce(Vector2.up * scaledJumpForce, ForceMode.Impulse);
+            float clampedJumpForce = Mathf.Clamp(scaledJumpForce, playerStats.JumpHeight, Mathf.Infinity);
+            rb.AddForce(Vector2.up * clampedJumpForce, ForceMode.Impulse);
             animator.SetTrigger("Jump");
         }
+    }
+
+    public void OnUseHealthPotion(InputAction.CallbackContext context)
+    {
+        playerStatsManager.Invoke("UseHealthPotion", .5f);
+        HealthParticles.Play();
+    }
+
+    public void OnUseSpeedPotion(InputAction.CallbackContext context)
+    {
+        playerStatsManager.Invoke("UseSpeedBoost", .5f);
+        SpeedParticles.Play();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -132,7 +147,7 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(new Vector2(horizontalForce, 0f));
 
         // Clamp player velocity
-        rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxPlayerSpeed);
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, playerStats.playerSpeed);
 
         // Handle sliding
         if (!isPlayerMoving && isGrounded)
