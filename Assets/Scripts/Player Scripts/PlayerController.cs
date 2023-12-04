@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerStats.playerSpeed = 20f;
         maxPlayerSpeed = playerStats.playerSpeed;
         playerStatsManager = GetComponent<PlayerStatsManager>();
         animator = GetComponent<Animator>();
@@ -105,9 +106,6 @@ public class PlayerController : MonoBehaviour
         playerMoveVector = context.ReadValue<Vector2>();
         if (context.started)
         {
-            float targetRotationY = Mathf.Sign(playerMoveVector.x) > 0 ? 0f : -180f;
-            transform.rotation = Quaternion.Euler(0f, targetRotationY, 0f);
-            isPlayerRight = playerMoveVector.x > 0;
             isPlayerMoving = true;
             rb.drag = defaultDrag;
         }

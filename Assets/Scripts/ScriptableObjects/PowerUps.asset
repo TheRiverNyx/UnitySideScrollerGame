@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PowerUps
   m_EditorClassIdentifier: 
   numOfHealthPotions: 0
-  Health: 15.032489
+  Health: 98.18494
   minHealthPickup: 10
   maxHealthPickup: 50
-  playerSpeed: 110.8
+  playerSpeed: 40
   boostAmount: 20
-  numOfSpeedBoosts: 4
+  numOfSpeedBoosts: 0
   JumpHeight: 5.23
   Ammo: 0
   minAmmoPickup: 4

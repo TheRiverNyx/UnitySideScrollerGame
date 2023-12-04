@@ -12,14 +12,19 @@ public class PlayerStatsManager : MonoBehaviour
     private UIManager uiManager;
     
     private float fixedDeltaTime;
-    
-    private 
+
+    private AudioSource[] playerSoundsSources;
+
+    private AudioSource hurtSound;
     // Start is called before the first frame update
     void Start()
     {
         // Initialize player health
         playerStats.Health = playerMaxHealth;
         uiManager= GetComponent<UIManager>();
+        playerSoundsSources = GetComponents<AudioSource>();
+        hurtSound = playerSoundsSources[0];
+        
 
     }
     void Awake()
@@ -29,10 +34,12 @@ public class PlayerStatsManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    public UnityEvent<float> TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         // Reduce player health by the specified damage amount
         playerStats.Health -= damage;
+        hurtSound.Play();
+        Debug.Log("Player took damage");
         uiManager.UpdateHealth();
         // Check if player health is below or equal to zero
         if (playerStats.Health <= 0)
@@ -42,7 +49,6 @@ public class PlayerStatsManager : MonoBehaviour
             
         }
         
-        return null;
     }
 
     public UnityEvent<int> PickUpAmmo()
@@ -50,6 +56,7 @@ public class PlayerStatsManager : MonoBehaviour
         int amount = Random.Range(playerStats.minAmmoPickup, playerStats.maxAmmoPickup + 1);
         // Increase player ammo count by the specified amount
         playerStats.Ammo += amount;
+        uiManager.UpdateAmmo();
         return null;
     }
 
@@ -61,6 +68,7 @@ public class PlayerStatsManager : MonoBehaviour
             playerStats.numOfSpeedBoosts -= 1;
             playerStats.playerSpeed += playerStats.boostAmount;
             Invoke("ResetSpeed",10);
+            uiManager.UpdateSpeedBoostCount();
         }
         return null;
     }
@@ -68,12 +76,14 @@ public class PlayerStatsManager : MonoBehaviour
     public UnityEvent<int> PickUpSpeedBoost()
     {
         playerStats.numOfSpeedBoosts += 1;
+        uiManager.UpdateSpeedBoostCount();
         return null;
     }
 
     public UnityEvent<int> PickUpHealthPotion()
     {
         playerStats.numOfHealthPotions += 1;
+        uiManager.UpdateHealthPotionCount();
         return null;
     }
     public UnityEvent<int> UseHealthPotion()
@@ -86,7 +96,7 @@ public class PlayerStatsManager : MonoBehaviour
 
             // Ensure health potions don't go below zero
             playerStats.numOfHealthPotions = Mathf.Max(playerStats.numOfHealthPotions, 0);
-            
+            uiManager.UpdateHealthPotionCount();
             uiManager.UpdateHealth();
         }
 
@@ -96,6 +106,7 @@ public class PlayerStatsManager : MonoBehaviour
     public void Shoot()
     {
         playerStats.Ammo -= 1;
+        uiManager.UpdateAmmo();
     }
     private void ResetSpeed()
     {
@@ -105,7 +116,7 @@ public class PlayerStatsManager : MonoBehaviour
     public void EndGame()
     {
         uiManager.IsDeadMessage();
-        Time.timeScale = 0.7f;
+        Time.timeScale = 0.1f;
         Time.fixedDeltaTime = this.fixedDeltaTime * Time.timeScale;
         
     }
